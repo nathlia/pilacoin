@@ -26,7 +26,7 @@ public class WebSocketService {
 
     @Scheduled(fixedRate = 30000)
     private void enviaMsgDificuldade() {
-        //    simpMessagingTemplate.convertAndSend("/topic/dificuldade", );
+            simpMessagingTemplate.convertAndSend("/topic/dificuldade", 10000);
     }
 
 
