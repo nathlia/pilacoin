@@ -25,7 +25,7 @@ public class ValidationService {
                 .dataCriacao(new Date())
                 .idCriador("professor")
                 .chaveCriador(kp.getPublic().getEncoded())
-                .magicNumber(new BigInteger(128, new SecureRandom()))
+                .nonce(new BigInteger(128, new SecureRandom()))
                 .assinaturaMaster("fdgfdsgfdsgfdsgdsfgdsf".getBytes(StandardCharsets.UTF_8)).build();
         System.out.println(mapper.writeValueAsString(pilaCoin));
     }
