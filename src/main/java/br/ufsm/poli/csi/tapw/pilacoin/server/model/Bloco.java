@@ -1,17 +1,17 @@
 package br.ufsm.poli.csi.tapw.pilacoin.server.model;
 
-import javax.persistence.*;
+//import javax.persistence.*;
 import java.util.List;
 
-@Entity
+//@Entity
 public class Bloco {
 
-    @Id
-    @GeneratedValue
+    //@Id
+    //@GeneratedValue
     private Long id;
     private Long nonce;
     private byte[] hashBlocoAnterior;
-    @OneToMany(mappedBy = "bloco")
+    //@OneToMany(mappedBy = "bloco")
     private List<Transasao> transacoes;
 
     public Long getId() {
