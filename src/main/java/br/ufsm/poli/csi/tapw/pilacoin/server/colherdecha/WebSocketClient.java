@@ -1,6 +1,7 @@
 package br.ufsm.poli.csi.tapw.pilacoin.server.colherdecha;
 
 import lombok.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.converter.StringMessageConverter;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
+import javax.annotation.PostConstruct;
 import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.util.Objects;
@@ -20,20 +22,24 @@ import java.util.Objects;
 public class WebSocketClient {
 
     private MyStompSessionHandler sessionHandler = new MyStompSessionHandler();
+    @Value("${endereco.server}")
+    private String enderecoServer;
 
-    @SneakyThrows
-    public WebSocketClient() {
+    @PostConstruct
+    private void init() {
         System.out.println("iniciou");
         StandardWebSocketClient client = new StandardWebSocketClient();
         WebSocketStompClient stompClient = new WebSocketStompClient(client);
         stompClient.setMessageConverter(new MappingJackson2MessageConverter());
-        stompClient.connect("ws://srv-ceesp.proj.ufsm.br:8097/websocket/websocket", sessionHandler);
+        stompClient.connect("ws://" + enderecoServer + "/websocket/websocket", sessionHandler);
         System.out.println("conectou");
     }
 
     @Scheduled(fixedRate = 3000)
     private void printDificuldade() {
-        System.out.println(sessionHandler.dificuldade);
+        if (sessionHandler.dificuldade != null) {
+            System.out.println("Dificuldade Atual: " + sessionHandler.dificuldade);
+        }
     }
 
     private static class MyStompSessionHandler implements StompSessionHandler {
