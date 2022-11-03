@@ -17,17 +17,7 @@ public class ValidationService {
 
     @SneakyThrows
     public static void main(String[] args) {
-        ObjectMapper mapper = new ObjectMapper();
-        KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
-        kpg.initialize(2048);
-        KeyPair kp = kpg.generateKeyPair();
-        PilaCoin pilaCoin = PilaCoin.builder()
-                .dataCriacao(new Date())
-                .idCriador("professor")
-                .chaveCriador(kp.getPublic().getEncoded())
-                .magicNumber(new BigInteger(128, new SecureRandom()))
-                .assinaturaMaster("fdgfdsgfdsgfdsgdsfgdsf".getBytes(StandardCharsets.UTF_8)).build();
-        System.out.println(mapper.writeValueAsString(pilaCoin));
+
     }
 
 }

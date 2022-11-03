@@ -22,14 +22,11 @@ import java.util.Date;
 public class WebSocketService {
 
     @Autowired
-    private MineracaoService mineracaoService;
-
-    @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @Scheduled(fixedRate = 30000)
     private void enviaMsgDificuldade() {
-        simpMessagingTemplate.convertAndSend("/topic/dificuldade", mineracaoService.geraDificuldade());
+            simpMessagingTemplate.convertAndSend("/topic/dificuldade", 10000);
     }
 
 
