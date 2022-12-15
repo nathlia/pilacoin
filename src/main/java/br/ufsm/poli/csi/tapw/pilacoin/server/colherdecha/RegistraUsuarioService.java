@@ -1,6 +1,9 @@
 package br.ufsm.poli.csi.tapw.pilacoin.server.colherdecha;
 
+import br.ufsm.poli.csi.tapw.pilacoin.server.model.Usuario;
+import br.ufsm.poli.csi.tapw.pilacoin.server.repository.UsuarioRepository;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 import java.io.*;
 import java.security.*;
 import java.security.spec.KeySpec;
@@ -25,6 +29,8 @@ public class RegistraUsuarioService {
 
     @Value("${endereco.server}")
     private String enderecoServer;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @PostConstruct
     public void init() {
@@ -32,6 +38,7 @@ public class RegistraUsuarioService {
     }
 
     @SneakyThrows
+    @Transactional
     public UsuarioRest registraUsuario(String nome) {
         KeyPair keyPair = leKeyPair();
         UsuarioRest usuarioRest = UsuarioRest.builder().nome(nome).chavePublica(keyPair.getPublic().getEncoded()).build();
@@ -42,7 +49,13 @@ public class RegistraUsuarioService {
         RestTemplate restTemplate = new RestTemplate();
         try {
             ResponseEntity<UsuarioRest> resp = restTemplate.postForEntity("http://" + enderecoServer + "/usuario/", entity, UsuarioRest.class);
-            return resp.getBody();
+            UsuarioRest usu = resp.getBody();
+            Usuario usuarioBD = new Usuario();
+            usuarioBD.setNome(usuarioRest.nome);
+            usuarioBD.setChavePrivada(keyPair.getPrivate().getEncoded());
+            usuarioBD.setChavePublica(keyPair.getPublic().getEncoded());
+            usuarioRepository.save(usuarioBD);
+            return usu;
         } catch (Exception e) {
             System.out.println("usuario já cadastrado.");
             String strPubKey = Base64.getEncoder().encodeToString(keyPair.getPublic().getEncoded());

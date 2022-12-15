@@ -1,18 +1,22 @@
 package br.ufsm.poli.csi.tapw.pilacoin.server.model;
 
 //import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.List;
 
-//@Entity
+@Entity
 public class Bloco {
 
-    //@Id
-    //@GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
     private Long nonce;
     private byte[] hashBlocoAnterior;
-    //@OneToMany(mappedBy = "bloco")
-    private List<Transasao> transacoes;
+    @OneToMany(mappedBy = "bloco")
+    private List<Transacao> transacoes;
 
     public Long getId() {
         return id;
@@ -38,11 +42,11 @@ public class Bloco {
         this.hashBlocoAnterior = hashBlocoAnterior;
     }
 
-    public List<Transasao> getTransacoes() {
+    public List<Transacao> getTransacoes() {
         return transacoes;
     }
 
-    public void setTransacoes(List<Transasao> transacoes) {
+    public void setTransacoes(List<Transacao> transacoes) {
         this.transacoes = transacoes;
     }
 }

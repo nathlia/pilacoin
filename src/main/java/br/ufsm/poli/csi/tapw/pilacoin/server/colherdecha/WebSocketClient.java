@@ -74,7 +74,9 @@ public class WebSocketClient {
         public void handleFrame(StompHeaders stompHeaders, Object o) {
             //System.out.println("Received : " + o);
             assert o != null;
-            dificuldade = new BigInteger(((DificuldadeRet) o).getDificuldade(), 16);
+            if (Objects.equals(stompHeaders.getDestination(), "/topic/dificuldade")) {
+                dificuldade = new BigInteger(((DificuldadeRet) o).getDificuldade(), 16);
+            }
         }
     }
 

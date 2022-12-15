@@ -1,20 +1,19 @@
 package br.ufsm.poli.csi.tapw.pilacoin.server.model;
 
 import br.ufsm.poli.csi.tapw.pilacoin.model.PilaCoin;
+import javax.persistence.*;
 
-//import javax.persistence.*;
+@Entity
+public class Transacao {
 
-//@Entity
-public class Transasao {
-
-    //@Id
-    //@GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
-    //@ManyToOne
-    //@JoinColumn(name="id_bloco")
+    @ManyToOne
+    @JoinColumn(name="id_bloco")
     private Bloco bloco;
-    //@ManyToOne
-    //@JoinColumn(name = "id_pila")
+    @ManyToOne
+    @JoinColumn(name = "id_pila")
     private PilaCoin pilaCoin;
 
     public Long getId() {

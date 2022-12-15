@@ -8,19 +8,22 @@ import lombok.NoArgsConstructor;
 //import javax.persistence.Entity;
 //import javax.persistence.GeneratedValue;
 //import javax.persistence.Id;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.PublicKey;
 import java.util.Date;
 
-//@Entity
+@Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class PilaCoin implements Serializable {
 
-  //  @Id
-  //  @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
     private String idCriador;
     private Date dataCriacao;
