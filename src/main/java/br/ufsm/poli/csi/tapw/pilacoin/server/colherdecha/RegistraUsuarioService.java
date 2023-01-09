@@ -50,11 +50,11 @@ public class RegistraUsuarioService {
         try {
             ResponseEntity<UsuarioRest> resp = restTemplate.postForEntity("http://" + enderecoServer + "/usuario/", entity, UsuarioRest.class);
             UsuarioRest usu = resp.getBody();
-            Usuario usuarioBD = new Usuario();
-            usuarioBD.setNome(usuarioRest.nome);
-            usuarioBD.setChavePrivada(keyPair.getPrivate().getEncoded());
-            usuarioBD.setChavePublica(keyPair.getPublic().getEncoded());
-            usuarioRepository.save(usuarioBD);
+            Usuario usuarioDB = new Usuario();
+            usuarioDB.setNome(usu.nome);
+            usuarioDB.setChavePublica(keyPair.getPublic().getEncoded());
+            usuarioDB.setChavePrivada(keyPair.getPrivate().getEncoded());
+            usuarioRepository.save(usuarioDB);
             return usu;
         } catch (Exception e) {
             System.out.println("usuario já cadastrado.");
@@ -90,6 +90,10 @@ public class RegistraUsuarioService {
             privOut.close();
             return keyPair;
         }
+    }
+
+    public PublicKey getPrivateKey () {
+        return leKeyPair().getPublic();
     }
 
     @Data

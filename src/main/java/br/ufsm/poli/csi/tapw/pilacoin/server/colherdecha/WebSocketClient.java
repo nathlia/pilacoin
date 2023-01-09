@@ -1,6 +1,7 @@
 package br.ufsm.poli.csi.tapw.pilacoin.server.colherdecha;
 
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.converter.StringMessageConverter;
@@ -46,6 +47,7 @@ public class WebSocketClient {
 
         private BigInteger dificuldade;
 
+        //topicos que podem ser ouvidos, colocar aqui
         @Override
         public void afterConnected(StompSession stompSession,
                                    StompHeaders stompHeaders)
@@ -61,6 +63,7 @@ public class WebSocketClient {
         public void handleTransportError(StompSession stompSession, Throwable throwable) {
         }
 
+        //decobre classe usada para converter
         @Override
         public Type getPayloadType(StompHeaders stompHeaders) {
             //System.out.println(stompHeaders);
@@ -78,6 +81,11 @@ public class WebSocketClient {
                 dificuldade = new BigInteger(((DificuldadeRet) o).getDificuldade(), 16);
             }
         }
+    }
+
+    public BigInteger getDificuldade() {
+        System.out.println(sessionHandler.dificuldade);
+        return sessionHandler.dificuldade;
     }
 
     @Builder
