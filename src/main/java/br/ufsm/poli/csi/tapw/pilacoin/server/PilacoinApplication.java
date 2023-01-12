@@ -1,5 +1,6 @@
 package br.ufsm.poli.csi.tapw.pilacoin.server;
 
+import br.ufsm.poli.csi.tapw.pilacoin.server.jobr.ProcessScheduler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;

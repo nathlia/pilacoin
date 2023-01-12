@@ -7,7 +7,6 @@ import java.math.BigInteger;
 
 @Service
 public class MineracaoController {
-    private Minerar minerar;
     private WebSocketClient webSocketClient;
 
     public BigInteger getDificuldade() {
