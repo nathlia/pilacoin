@@ -82,7 +82,7 @@ public class WebSocketClient {
     }
 
     public BigInteger getDificuldade() {
-        System.out.println(sessionHandler.dificuldade);
+        System.out.println(" GET DIFUCULDADE : " + sessionHandler.dificuldade);
         return sessionHandler.dificuldade;
     }
 

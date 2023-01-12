@@ -3,6 +3,7 @@ package br.ufsm.poli.csi.tapw.pilacoin.server.service;
 import br.ufsm.poli.csi.tapw.pilacoin.model.PilaCoin;
 import br.ufsm.poli.csi.tapw.pilacoin.server.colherdecha.RegistraUsuarioService;
 import br.ufsm.poli.csi.tapw.pilacoin.server.colherdecha.WebSocketClient;
+import br.ufsm.poli.csi.tapw.pilacoin.server.controller.MineracaoController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import lombok.SneakyThrows;
@@ -16,7 +17,7 @@ import java.util.Date;
 public class Mineracao {
 
     @Autowired
-    private WebSocketClient webSocketClient = new WebSocketClient();
+    private MineracaoController mineracaoController = new MineracaoController();
 
     @SneakyThrows
     public void initPilacoint(boolean minerar) {
@@ -47,8 +48,10 @@ public class Mineracao {
         //1329227995784915872903807060280344575
         BigInteger nonce = pilaCoin.getNonce();
 
+        BigInteger dificuldade = mineracaoController.getDificuldade();
+
         BigInteger numHash = new BigInteger(hash).abs();
-        BigInteger dificuldadeStatic = new BigInteger("1766847064778384329583297500742918515827483896875618958121606201292619775").abs();
+//        BigInteger dificuldadeStatic = new BigInteger("1766847064778384329583297500742918515827483896875618958121606201292619775").abs();
         SecureRandom rnd = new SecureRandom();
 
         // gerar nonce
@@ -67,18 +70,17 @@ public class Mineracao {
             md.digest(pilaJson.getBytes("UTF-8"));
             byte[] newHash = md.digest(pilaJson.getBytes("UTF-8"));
             numHash = new BigInteger(newHash).abs();
-
             //----------------------------------------
-        } while (dificuldadeStatic.compareTo(numHash) < 0);
+        } while (dificuldade.compareTo(numHash) < 0);
+
         System.out.println("--------------------------------------------------------------------------------------------");
         System.out.println(" 🔘 Pilacoin: ");
         System.out.println("--------------------------------------------------------------------------------------------");
         System.out.println(" ✔ = " + numHash);
-        System.out.println(" 💥 = " + dificuldadeStatic);
+        System.out.println(" 💥 = " + dificuldade);
         System.out.println(" nonce: " + pilaCoin.getNonce());
-        System.out.println(" compare: " + dificuldadeStatic.compareTo(numHash));
+        System.out.println(" compare: " + dificuldade.compareTo(numHash));
         System.out.println("--------------------------------------------------------------------------------------------");
-
     }
 }
 
