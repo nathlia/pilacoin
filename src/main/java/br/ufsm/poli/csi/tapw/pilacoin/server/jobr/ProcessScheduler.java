@@ -1,6 +1,6 @@
 package br.ufsm.poli.csi.tapw.pilacoin.server.jobr;
 
-import br.ufsm.poli.csi.tapw.pilacoin.server.service.Mineracao;
+import br.ufsm.poli.csi.tapw.pilacoin.server.service.MineracaoService;
 import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.scheduling.JobScheduler;
 import org.jobrunr.scheduling.cron.Cron;
@@ -13,16 +13,16 @@ public class ProcessScheduler {
     private JobScheduler jobScheduler;
 
     @Autowired
-    private Mineracao mineracao;
+    private MineracaoService mineracaoService;
 
     @Job
     public void processOnce(boolean minerar) {
-        jobScheduler.enqueue(() -> mineracao.initPilacoint(minerar));
+        jobScheduler.enqueue(() -> mineracaoService.initPilacoint(minerar));
     }
 
     @Job(name = "Mineracao de pila")
     public void processScheduledRecurrently(boolean minerar) {
-        jobScheduler.scheduleRecurrently(Cron.minutely(), () -> mineracao.initPilacoint(minerar));
+        jobScheduler.scheduleRecurrently(Cron.minutely(), () -> mineracaoService.initPilacoint(minerar));
     }
 
 }
