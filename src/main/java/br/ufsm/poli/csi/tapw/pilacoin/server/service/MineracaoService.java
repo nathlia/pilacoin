@@ -2,7 +2,6 @@ package br.ufsm.poli.csi.tapw.pilacoin.server.service;
 
 import br.ufsm.poli.csi.tapw.pilacoin.model.PilaCoin;
 import br.ufsm.poli.csi.tapw.pilacoin.server.colherdecha.RegistraUsuarioService;
-import br.ufsm.poli.csi.tapw.pilacoin.server.colherdecha.WebSocketClient;
 import br.ufsm.poli.csi.tapw.pilacoin.server.controller.MineracaoController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,7 @@ import java.security.*;
 import java.util.Date;
 
 @Service
-public class Mineracao {
+public class MineracaoService {
 
     @Autowired
     private MineracaoController mineracaoController = new MineracaoController();

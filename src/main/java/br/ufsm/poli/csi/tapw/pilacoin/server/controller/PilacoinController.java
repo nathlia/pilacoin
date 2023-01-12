@@ -1,6 +1,7 @@
-package br.ufsm.poli.csi.tapw.pilacoin.server.jobr;
+package br.ufsm.poli.csi.tapw.pilacoin.server.controller;
 
 
+import br.ufsm.poli.csi.tapw.pilacoin.server.jobr.ProcessScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
