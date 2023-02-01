@@ -43,15 +43,16 @@ public class RegistraUsuarioService {
         //headers.set("Authorization", "Bearer " + accessToken);
         HttpEntity<UsuarioRest> entity = new HttpEntity<>(usuarioRest, headers);
         RestTemplate restTemplate = new RestTemplate();
+
         try {
             ResponseEntity<UsuarioRest> resp = restTemplate.postForEntity("http://" + enderecoServer + "/usuario/", entity, UsuarioRest.class);
             UsuarioRest usu = resp.getBody();
-            Usuario usuarioDB = new Usuario();
+            Usuario usuarioDB2 = new Usuario();
             assert usu != null;
-            usuarioDB.setNome(usu.nome);
-            usuarioDB.setChavePublica(keyPair.getPublic().getEncoded());
-            usuarioDB.setChavePrivada(keyPair.getPrivate().getEncoded());
-            usuarioRepository.save(usuarioDB);
+            usuarioDB2.setNome(usu.nome);
+            usuarioDB2.setChavePublica(keyPair.getPublic().getEncoded());
+            usuarioDB2.setChavePrivada(keyPair.getPrivate().getEncoded());
+            usuarioRepository.save(usuarioDB2);
             return usu;
         } catch (Exception e) {
             System.out.println("usuario já cadastrado.");

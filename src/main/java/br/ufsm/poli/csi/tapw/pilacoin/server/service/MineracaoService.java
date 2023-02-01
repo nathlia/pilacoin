@@ -4,9 +4,10 @@ import br.ufsm.poli.csi.tapw.pilacoin.model.PilaCoin;
 import br.ufsm.poli.csi.tapw.pilacoin.server.colherdecha.RegistraUsuarioService;
 import br.ufsm.poli.csi.tapw.pilacoin.server.controller.MineracaoController;
 import br.ufsm.poli.csi.tapw.pilacoin.server.repositories.PilaCoinRepository;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -18,15 +19,22 @@ public class MineracaoService {
 
     @Autowired
     private MineracaoController mineracaoController = new MineracaoController();
+    @Autowired
+    private PilaCoinRepository pilaCoinRepository;
+    @Autowired
+    private PilaCoinService pilaCoinService;
 
     @Autowired
-    PilaCoinRepository pilaCoinRepository;
+    private RegistraUsuarioService registraUsuarioService;
+
 
     @SneakyThrows
     public void initPilacoint(boolean minerar) {
-
-        RegistraUsuarioService registraUsuarioService = new RegistraUsuarioService();
         PublicKey publicKey = registraUsuarioService.getPublicKey();
+
+        System.out.println("--------------------------------------------------------------------------------------------");
+        System.out.println("                            START: MINERAÇÃO ");
+        System.out.println("--------------------------------------------------------------------------------------------");
 
         while (minerar) {
             SecureRandom rnd = new SecureRandom();
@@ -36,6 +44,7 @@ public class MineracaoService {
             pilaCoin.setChaveCriador(publicKey.getEncoded());
             pilaCoin.setNonce(new BigInteger(128, rnd).abs());
             pilaCoin.setIdCriador("Nathalia");
+            pilaCoin.setStatus(PilaCoin.AG_VALIDACAO);
 
             String pilaJson = new ObjectMapper().writeValueAsString(pilaCoin);
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -44,24 +53,18 @@ public class MineracaoService {
 
             Minerador(hash, pilaCoin);
         }
+
+        System.out.println("--------------------------------------------------------------------------------------------");
+        System.out.println("                            FINISH: MINERAÇÃO ");
+        System.out.println("--------------------------------------------------------------------------------------------");
     }
 
     @SneakyThrows
     private void Minerador(byte[] hash, PilaCoin pilaCoin) {
-        //1329227995784915872903807060280344575
         BigInteger nonce = pilaCoin.getNonce();
-
         BigInteger dificuldade = mineracaoController.getDificuldade();
-
         BigInteger numHash = new BigInteger(hash).abs();
-//        BigInteger dificuldadeStatic = new BigInteger("1766847064778384329583297500742918515827483896875618958121606201292619775").abs();
         SecureRandom rnd = new SecureRandom();
-
-        // gerar nonce
-        // setar pilacoin
-        // converte string
-        // gera hash pilacoin
-        // comparar hash com a dificuldade = minerado
 
         do {
             //----------------------------------------
@@ -89,10 +92,31 @@ public class MineracaoService {
         if (pilaSaved.getId() != null) {
             System.out.println("Pila saved: " + pilaSaved.getId());
         } else {
-            System.out.println("Falha ao salvar pila na base de dados");
+            System.out.println("ERROR Creating pila");
         }
-
+        System.out.println("--------------------------------------------------------------------------------------------");
+        pilaCoin.setIdCriador(null);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        String pilaJson = objectMapper.writeValueAsString(pilaCoin);
+        System.out.println(pilaJson);
+        System.out.println("--------------------------------------------------------------------------------------------");
+        pilaCoinService.getPilacoinAndSend(pilaJson);
     }
+
+//    @Data
+//    @Builder
+//    @NoArgsConstructor
+//    @AllArgsConstructor
+//    @ToString
+//    private static class pilaToJson {
+//        private String assinaturaMaster;
+//        private String chaveCriador;
+//        private String dataCriacao;
+//        private Long id;
+//        private String nonce;
+//        private String status;
+//    }
 
 
 }

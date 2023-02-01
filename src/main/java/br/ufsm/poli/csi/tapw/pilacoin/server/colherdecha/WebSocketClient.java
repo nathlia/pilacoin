@@ -53,7 +53,7 @@ public class WebSocketClient {
                                    StompHeaders stompHeaders)
         {
             stompSession.subscribe("/topic/dificuldade", this);
-            stompSession.subscribe("/topic/dificuldade", this);
+            stompSession.subscribe("/topic/descobrirNovoBloco", this);
         }
 
         @Override

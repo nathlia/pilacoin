@@ -18,4 +18,5 @@ public class MineracaoController {
     public BigInteger getDificuldade() {
         return webSocketClient.getDificuldade();
     }
+
 }
