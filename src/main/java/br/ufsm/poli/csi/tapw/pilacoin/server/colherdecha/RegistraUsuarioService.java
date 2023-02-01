@@ -16,13 +16,9 @@ import org.springframework.web.client.RestTemplate;
 import javax.annotation.PostConstruct;
 import java.io.*;
 import java.security.*;
-import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.RSAPublicKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class RegistraUsuarioService {
@@ -93,7 +89,7 @@ public class RegistraUsuarioService {
         }
     }
 
-    public PublicKey getPrivateKey () {
+    public PublicKey getPublicKey() {
         return leKeyPair().getPublic();
     }
 

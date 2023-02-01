@@ -1,15 +1,20 @@
-package br.ufsm.poli.csi.tapw.pilacoin.server.service;
+package br.ufsm.poli.csi.tapw.pilacoin.server.controller;
 
 import br.ufsm.poli.csi.tapw.pilacoin.server.colherdecha.WebSocketClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 
-@Service
+@Controller
 public class MineracaoController {
-    private Minerar minerar;
+
+    @Autowired
     private WebSocketClient webSocketClient;
 
+    @MessageMapping("/dificuldade")
     public BigInteger getDificuldade() {
         return webSocketClient.getDificuldade();
     }
