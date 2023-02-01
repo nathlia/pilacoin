@@ -9,7 +9,8 @@ import javax.annotation.PostConstruct;
 @Service
 public class PilaCoinService {
     @Value("${endereco.server}")
-    private String enderecoServer;
+    private static final String serverAdress = "${endereco.server}";
+    private static final String url = "http://" + serverAdress + "/pilacoin/";
 
 //    Minerar minerar = new Minerar();
 
@@ -17,6 +18,8 @@ public class PilaCoinService {
     public void init() {
        // System.out.println("Pilacoin enviado: " + enviaPila());
     }
+
+
 
     public void enviaPila(PilaCoin pilaCoin) {
 

@@ -31,6 +31,8 @@ public class PilaCoin implements Serializable {
     private byte[] assinaturaMaster;
     private BigInteger nonce; //utilizar precisão de 128 bits
 
+    private String status;
+
     public Long getId() {
         return id;
     }

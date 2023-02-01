@@ -1,7 +1,7 @@
 package br.ufsm.poli.csi.tapw.pilacoin.server.colherdecha;
 
 import br.ufsm.poli.csi.tapw.pilacoin.server.model.Usuario;
-import br.ufsm.poli.csi.tapw.pilacoin.server.repository.UsuarioRepository;
+import br.ufsm.poli.csi.tapw.pilacoin.server.repositories.UsuarioRepository;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,7 +30,7 @@ public class RegistraUsuarioService {
 
     @PostConstruct
     public void init() {
-        System.out.println("Registrado usuário: " + registraUsuario("Professor Rafael"));
+        System.out.println("Registrado usuário: " + registraUsuario("Nathalia"));
     }
 
     @SneakyThrows
@@ -47,6 +47,7 @@ public class RegistraUsuarioService {
             ResponseEntity<UsuarioRest> resp = restTemplate.postForEntity("http://" + enderecoServer + "/usuario/", entity, UsuarioRest.class);
             UsuarioRest usu = resp.getBody();
             Usuario usuarioDB = new Usuario();
+            assert usu != null;
             usuarioDB.setNome(usu.nome);
             usuarioDB.setChavePublica(keyPair.getPublic().getEncoded());
             usuarioDB.setChavePrivada(keyPair.getPrivate().getEncoded());

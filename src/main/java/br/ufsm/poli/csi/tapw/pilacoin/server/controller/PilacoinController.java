@@ -19,4 +19,6 @@ public class PilacoinController {
         boolean minerar = true;
         processScheduler.processOnce(minerar);
     }
+
+
 }
