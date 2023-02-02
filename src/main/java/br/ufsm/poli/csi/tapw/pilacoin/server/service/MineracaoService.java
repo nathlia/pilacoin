@@ -3,18 +3,16 @@ package br.ufsm.poli.csi.tapw.pilacoin.server.service;
 import br.ufsm.poli.csi.tapw.pilacoin.model.PilaCoin;
 import br.ufsm.poli.csi.tapw.pilacoin.server.colherdecha.RegistraUsuarioService;
 import br.ufsm.poli.csi.tapw.pilacoin.server.controller.MineracaoController;
-import br.ufsm.poli.csi.tapw.pilacoin.server.repositories.PilaCoinRepository;
+import br.ufsm.poli.csi.tapw.pilacoin.server.controller.PilacoinController;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
-import java.util.Arrays;
 import java.util.Date;
 
 @Service
@@ -22,6 +20,9 @@ public class MineracaoService {
 
     @Autowired
     private MineracaoController mineracaoController = new MineracaoController();
+
+    @Autowired
+    private PilacoinController pilacoinController = new PilacoinController();
 
     @Autowired
     private PilaCoinService pilaCoinService;
@@ -38,17 +39,20 @@ public class MineracaoService {
         System.out.println("||                                  START: MINERAÇÃO                                        ||");
         System.out.println(" ============================================================================================");
 
-        while (minerar) {
+        while (minerar == true) {
             PilaCoin pilaCoin = new PilaCoin();
             pilaCoin.setDataCriacao(new Date());
             pilaCoin.setChaveCriador(publicKey.getEncoded());
 
             Minerador(pilaCoin);
-        }
 
-        System.out.println(" ============================================================================================");
-        System.out.println("||                                  FINISH: MINERAÇÃO                                       ||");
-        System.out.println(" ============================================================================================");
+            if (pilacoinController.getIsStopped() == true) {
+                System.out.println(" ============================================================================================");
+                System.out.println("||                                  FINISH: MINERAÇÃO                                       ||");
+                System.out.println(" ============================================================================================");
+                break;
+            }
+        }
     }
 
     private void Minerador( PilaCoin pilaCoin) {
@@ -61,25 +65,25 @@ public class MineracaoService {
                 MessageDigest md = MessageDigest.getInstance("SHA-256");
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-                SecureRandom rnd = new SecureRandom();
             do {
+                SecureRandom rnd = new SecureRandom();
                 nonce = new BigInteger(128, rnd).abs();
                 pilaCoin.setNonce(nonce);
                 String pilaJson = objectMapper.writeValueAsString(pilaCoin);
                 byte[] newHash = md.digest(pilaJson.getBytes(StandardCharsets.UTF_8));
                 numHash = new BigInteger(newHash).abs();
                 //----------------------------------------
-            } while (dificuldade.compareTo(numHash) < 0);
+            } while (numHash.compareTo(dificuldade) >= 0);
 
-            int compare = dificuldade.compareTo(numHash) ;
+            int compare = numHash.compareTo(dificuldade) ;
             String compareResult;
 
             if (compare > 0) {
-                compareResult = "Dificuldade eh maior que hash.";
+                compareResult = "hash eh maior que dificuldade.";
             } else if (compare < 0) {
-                compareResult = "Dificuldade eh menor que hash.";
+                compareResult = "hash eh menor que dificuldade.";
             } else {
-                compareResult = "Dificuldade eh igual hash.";
+                compareResult = "hash eh igual dificuldade.";
             }
 
             System.out.println("============================================================================================");

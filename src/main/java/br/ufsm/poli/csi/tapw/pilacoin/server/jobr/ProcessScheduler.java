@@ -21,7 +21,7 @@ public class ProcessScheduler {
     }
 
     @Job(name = "Mineracao de pila")
-    public void processScheduledRecurrently(boolean minerar) {
+    public void processRecurrently(boolean minerar) {
         jobScheduler.scheduleRecurrently(Cron.minutely(), () -> mineracaoService.initPilacoint(minerar));
     }
 
