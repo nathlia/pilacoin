@@ -1,13 +1,11 @@
 package br.ufsm.poli.csi.tapw.pilacoin.model;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 //import javax.persistence.Entity;
 //import javax.persistence.GeneratedValue;
@@ -27,6 +25,8 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@JsonPropertyOrder(alphabetic = true)
 public class PilaCoin implements Serializable {
 
     @Id
@@ -36,6 +36,7 @@ public class PilaCoin implements Serializable {
     private Date dataCriacao;
     private byte[] chaveCriador;
     private byte[] assinaturaMaster;
+    @Column(columnDefinition = "NUMERIC(39)")
     private BigInteger nonce; //utilizar precisão de 128 bits
     private String status;
 
