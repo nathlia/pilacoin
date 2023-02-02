@@ -3,8 +3,9 @@ package br.ufsm.poli.csi.tapw.pilacoin.server.service;
 import br.ufsm.poli.csi.tapw.pilacoin.model.PilaCoin;
 import br.ufsm.poli.csi.tapw.pilacoin.server.repositories.PilaCoinRepository;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -43,7 +44,6 @@ public class PilaCoinService {
             System.out.println(" ❌ ERROR Saving pila");
         }
         System.out.println("--------------------------------------------------------------------------------------------");
-
     }
 
     @PostConstruct
@@ -116,10 +116,22 @@ public class PilaCoinService {
         }
     }
 
-    public boolean isNonceValid(PilaCoin pilaCoin, BigInteger targetDifficulty) {
+    public boolean isNonceValid(PilaCoin pilaCoin, BigInteger targetDifficulty) throws JsonProcessingException {
+        PilaCoin pilaCoinToValidade = new PilaCoin();
+
+        pilaCoinToValidade.setId(pilaCoin.getId());
+        pilaCoinToValidade.setIdCriador(pilaCoin.getIdCriador());
+        pilaCoinToValidade.setChaveCriador(pilaCoin.getChaveCriador());
+        pilaCoinToValidade.setAssinaturaMaster(pilaCoin.getAssinaturaMaster());
+        pilaCoinToValidade.setDataCriacao(pilaCoin.getDataCriacao());
+        pilaCoinToValidade.setStatus(pilaCoin.getStatus());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
         String nonce = String.valueOf(pilaCoin.getNonce());
-        String data = pilaCoin + nonce;
-        byte[] hash = getHash(data);
+        String data =  objectMapper.writeValueAsString(pilaCoinToValidade);
+        byte[] hash = getHash(data + nonce);
 
         // Convert the hash to a BigInteger for comparison with the target difficulty
         BigInteger hashInt = new BigInteger(1, hash);
@@ -135,6 +147,15 @@ public class PilaCoinService {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    @Builder
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PilaCoinToSend {
+        private String dificuldade;
     }
 
 }
