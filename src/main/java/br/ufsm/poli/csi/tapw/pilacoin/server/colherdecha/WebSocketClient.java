@@ -4,6 +4,7 @@ import br.ufsm.poli.csi.tapw.pilacoin.model.PilaCoin;
 import br.ufsm.poli.csi.tapw.pilacoin.server.model.Bloco;
 import br.ufsm.poli.csi.tapw.pilacoin.server.service.ValidaPilaService;
 import br.ufsm.poli.csi.tapw.pilacoin.server.service.ValidarBlocoService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
@@ -93,10 +94,10 @@ public class WebSocketClient {
                 dificuldade = new BigInteger(((DificuldadeRet) o).getDificuldade(), 16);
             }  else if (o.getClass().equals(PilaCoin.class)) {
                 pilaCoin = (PilaCoin) o;
-                System.out.println("  ❕  " + pilaCoin);
+                System.out.println("  ❕ " + pilaCoin.getNonce());
             } else if (o.getClass().equals(Bloco.class)) {
                 bloco = (Bloco) o;
-                System.out.println("  ❗  " + bloco);
+                System.out.println("  ❗ " + bloco);
             }
         }
     }

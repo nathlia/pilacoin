@@ -30,6 +30,8 @@ public class MineracaoService {
     @Autowired
     private RegistraUsuarioService registraUsuarioService;
 
+    @Autowired
+    private ValidaPilaService validaPilaService;
 
     @SneakyThrows
     public void initPilacoint(boolean minerar) {
@@ -94,7 +96,19 @@ public class MineracaoService {
             System.out.println(" nonce: " + pilaCoin.getNonce());
             System.out.println(" compare: "+ compare + ". " + compareResult);
             System.out.println("============================================================================================");
-            pilaCoinService.getPilacoinAndSend(pilaCoin);
+
+            if (pilaCoinService.isNonceValid(pilaCoin, dificuldade)) {
+                System.out.println(" 🤍  PILACOIN IS VALID!  🤍  PILACOIN IS VALID!  🤍  PILACOIN IS VALID!  🤍  PILACOIN IS V");
+                System.out.println("============================================================================================");
+                pilaCoinService.savePila(pilaCoin);
+                pilaCoinService.getPilacoinAndSend(pilaCoin);
+            }
+
+            if (validaPilaService.validarPila(pilaCoin)) {
+                System.out.println(" ❤  PILACOIN IS VALID!  ❤  PILACOIN IS VALID!  ❤  PILACOIN IS VALID!  ❤  PILACOIN IS V");
+                System.out.println("============================================================================================");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

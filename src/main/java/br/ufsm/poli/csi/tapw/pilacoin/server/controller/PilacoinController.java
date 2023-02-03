@@ -5,6 +5,8 @@ import br.ufsm.poli.csi.tapw.pilacoin.model.PilaCoin;
 import br.ufsm.poli.csi.tapw.pilacoin.server.colherdecha.WebSocketClient;
 import br.ufsm.poli.csi.tapw.pilacoin.server.jobr.ProcessScheduler;
 import br.ufsm.poli.csi.tapw.pilacoin.server.service.PilaCoinService;
+import br.ufsm.poli.csi.tapw.pilacoin.server.service.ValidaPilaService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,9 @@ public class PilacoinController {
 
     @Autowired
     private PilaCoinService pilaCoinService;
+
+    @Autowired
+    private ValidaPilaService validaPilaService;
 
 
     private boolean isStopped = false;
@@ -56,19 +61,23 @@ public class PilacoinController {
         }
     }
 
-    @PostMapping("pilacoin/validaPilaOutroUsuario")
-    public ResponseEntity<String> validarCoin(@RequestBody PilaCoin pilacoin) {
+    @GetMapping("pilacoin/validaPilaOutroUsuario")
+    public ResponseEntity<String> validarCoin() {
         BigInteger dificuldade = webSocketClient.getDificuldade();
-        if (isValidPilacoin(pilacoin, dificuldade)) {
+        PilaCoin pilaCoin = webSocketClient.getPilaCoin();
+        if (isValidPilacoin(pilaCoin, dificuldade)) {
             // send the pilacoin to the server
-            return ResponseEntity.ok("Pilacoin válido e enviado com sucesso");
+            return ResponseEntity.ok("Pilacoin válido !");
         } else {
             return ResponseEntity.badRequest().body("Pilacoin inválido");
         }
     }
 
+    @SneakyThrows
     private boolean isValidPilacoin(PilaCoin pilacoin, BigInteger dificuldade) {
-        // validate the pilacoin using the difficulty
-        return true;
+        if (validaPilaService.validarPila(pilacoin) == true) {
+            return true;
+        };
+        return false;
     }
 }

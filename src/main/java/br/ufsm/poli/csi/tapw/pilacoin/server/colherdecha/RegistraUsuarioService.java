@@ -101,6 +101,10 @@ public class RegistraUsuarioService {
         return leKeyPair().getPublic();
     }
 
+    public PrivateKey getPrivateKey() {
+        return leKeyPair().getPrivate();
+    }
+
     @Data
     @Builder
     @NoArgsConstructor
