@@ -1,6 +1,8 @@
 package br.ufsm.poli.csi.tapw.pilacoin.server.auth;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,6 +32,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         final String requestTokenHeader = request.getHeader("Authorization");
 
         System.out.println(requestTokenHeader); // = null
+
+        String url = request.getRequestURI();
+        System.out.println("Requisition Filter: " + url);
+
+
+        String token = request.getHeader("Authorization");
+        System.out.println("Token: " + token);
 
         String username = null;
         String jwtToken = null;
@@ -64,6 +73,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }
         chain.doFilter(request, response);
+    }
+
+    private Claims parseToken(String token) {
+        return Jwts.parser()
+                .setSigningKey("giflex")
+                .parseClaimsJws(token.replace("Bearer", ""))
+                .getBody();
     }
 
 }

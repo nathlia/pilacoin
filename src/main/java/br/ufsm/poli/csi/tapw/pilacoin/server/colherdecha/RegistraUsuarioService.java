@@ -55,12 +55,12 @@ public class RegistraUsuarioService {
             usuarioRepository.save(usuarioDB2);
             return usu;
         } catch (Exception e) {
-            Usuario usuarioDB = new Usuario();
-            usuarioDB.setNome(nome);
-            usuarioDB.setChavePublica(keyPair.getPublic().getEncoded());
-            usuarioDB.setChavePrivada(keyPair.getPrivate().getEncoded());
-            usuarioRepository.save(usuarioDB);
-            System.out.println("USUARIO SALVO NO BANCO!");
+//            Usuario usuarioDB = new Usuario();
+//            usuarioDB.setNome(nome);
+//            usuarioDB.setChavePublica(keyPair.getPublic().getEncoded());
+//            usuarioDB.setChavePrivada(keyPair.getPrivate().getEncoded());
+//            usuarioRepository.save(usuarioDB);
+//            System.out.println("USUARIO SALVO NO BANCO!");
 
             System.out.println("usuario já cadastrado.");
             String strPubKey = Base64.getEncoder().encodeToString(keyPair.getPublic().getEncoded());

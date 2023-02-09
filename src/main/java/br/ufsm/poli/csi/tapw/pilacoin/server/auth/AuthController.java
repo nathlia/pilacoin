@@ -1,5 +1,7 @@
 package br.ufsm.poli.csi.tapw.pilacoin.server.auth;
 
+import br.ufsm.poli.csi.tapw.pilacoin.server.model.Usuario;
+import br.ufsm.poli.csi.tapw.pilacoin.server.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@CrossOrigin(origins = "*")
 //@Api("Autenticação")
 public class AuthController {
 
@@ -26,12 +27,20 @@ public class AuthController {
     @Autowired
     private JwtUserDetailsService userDetailsService;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     //@ApiOperation("Autentica e retorna um token válido a partir do usernamene e senha do integrador.")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         String token = jwtTokenUtil.generateToken(userDetails);
+//        Usuario usuario = new Usuario();
+//        usuario = usuarioRepository.findByUsername(userDetails.getUsername());
+//        usuario.setToken(token);
+//        usuarioRepository.save(usuario);
+
         return ResponseEntity.ok(new JwtResponse(token, false));
     }
 

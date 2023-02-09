@@ -1,5 +1,8 @@
 package br.ufsm.poli.csi.tapw.pilacoin.server.auth;
 
+import br.ufsm.poli.csi.tapw.pilacoin.server.model.Usuario;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -7,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
@@ -16,15 +20,11 @@ public class JwtUserDetailsService implements UserDetailsService {
         return new User(emailLogin, new BCryptPasswordEncoder().encode("teste"), new ArrayList<>());
     }
 
-    /*private List<GrantedAuthority> getGrantedAuthorities(Eletroposto eletroposto) {
+    private List<GrantedAuthority> getGrantedAuthorities(Usuario usuario) {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        if (eletroposto.getAdmin() != null && eletroposto.getAdmin()) {
-            authorities.add(new SimpleGrantedAuthority("ADMIN"));
-        } else {
-            authorities.add(new SimpleGrantedAuthority("USER"));
-        }
+        authorities.add(new SimpleGrantedAuthority("USER"));
         return authorities;
-    }*/
+    }
 
 
 }
