@@ -13,6 +13,8 @@ public class Usuario {
     private byte[] chavePublica;
     private byte[] chavePrivada;
     private String nome;
+    private String senha;
+    private String token;
 
     public Long getId() {
         return id;
@@ -44,5 +46,21 @@ public class Usuario {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
