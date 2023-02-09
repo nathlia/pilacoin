@@ -54,7 +54,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/authenticate", "/v2/api-docs", "/configuration/ui", "/swagger-resources/**",
                         "/configuration/**", "/swagger-ui.html", "/webjars/**", "/websocket/**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/minerar").permitAll().
+                .antMatchers(HttpMethod.GET,"/minerar").permitAll()
+                .antMatchers(HttpMethod.GET,"/minerar/{minerar}").permitAll()
+                .antMatchers(HttpMethod.GET,"/pilacoins").permitAll().
         // Qualquer outra requisição deve ser checada
         anyRequest().authenticated().and().
                 exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()

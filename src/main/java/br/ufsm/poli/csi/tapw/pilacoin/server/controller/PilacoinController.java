@@ -4,14 +4,19 @@ package br.ufsm.poli.csi.tapw.pilacoin.server.controller;
 import br.ufsm.poli.csi.tapw.pilacoin.model.PilaCoin;
 import br.ufsm.poli.csi.tapw.pilacoin.server.colherdecha.WebSocketClient;
 import br.ufsm.poli.csi.tapw.pilacoin.server.jobr.ProcessScheduler;
+import br.ufsm.poli.csi.tapw.pilacoin.server.repositories.PilaCoinRepository;
 import br.ufsm.poli.csi.tapw.pilacoin.server.service.PilaCoinService;
 import br.ufsm.poli.csi.tapw.pilacoin.server.service.ValidaPilaService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -27,6 +32,40 @@ public class PilacoinController {
 
     @Autowired
     private ValidaPilaService validaPilaService;
+
+    final
+    PilaCoinRepository pilacoinRepository;
+
+    public PilacoinController(PilaCoinRepository pilacoinRepository) {
+        this.pilacoinRepository = pilacoinRepository;
+    }
+
+    @GetMapping("/pilacoins")
+    public ResponseEntity<List<PilaCoin>> getAllPilacoins(@RequestParam(required = false) String name) {
+        try {
+            List<PilaCoin> pilacoins = new ArrayList<>();
+
+            if (name == null) {
+                pilacoins.addAll(pilacoinRepository.findAll());
+            }
+
+            if (pilacoins.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            return new ResponseEntity<>(pilacoins, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/pilacoins/{id}")
+    public ResponseEntity<PilaCoin> getPilacoinById(@PathVariable("id") Long id) {
+        Optional<PilaCoin> pilacoinData = pilacoinRepository.findById(id);
+
+        return pilacoinData.map(pilacoin -> new ResponseEntity<>(pilacoin, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 
 
     private boolean isStopped = false;

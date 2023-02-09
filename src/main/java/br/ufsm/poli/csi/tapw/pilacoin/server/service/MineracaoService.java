@@ -22,7 +22,7 @@ public class MineracaoService {
     private MineracaoController mineracaoController = new MineracaoController();
 
     @Autowired
-    private PilacoinController pilacoinController = new PilacoinController();
+    private PilacoinController pilacoinController ;
 
     @Autowired
     private PilaCoinService pilaCoinService;

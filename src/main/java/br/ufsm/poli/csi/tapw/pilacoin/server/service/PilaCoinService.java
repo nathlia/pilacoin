@@ -41,6 +41,7 @@ public class PilaCoinService {
     public void savePila(PilaCoin pilaCoin){
         PilaCoin pilaSaved = pilaCoinRepository.save(pilaCoin);
         pilaSaved.setIdCriador("Nathalia");
+        pilaSaved.setStatus(PilaCoin.AG_VALIDACAO);
         if (pilaSaved.getId() != null) {
             System.out.println(" 💾 Pila saved: " + pilaSaved.getId());
         } else {
