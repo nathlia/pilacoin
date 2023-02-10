@@ -31,15 +31,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         final String requestTokenHeader = request.getHeader("Authorization");
 
-        System.out.println(requestTokenHeader); // = null
-
-        String url = request.getRequestURI();
-        System.out.println("Requisition Filter: " + url);
-
-
-        String token = request.getHeader("Authorization");
-        System.out.println("Token: " + token);
-
         String username = null;
         String jwtToken = null;
 
@@ -48,7 +39,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             System.out.println(jwtToken);
             jwtToken = requestTokenHeader.substring(7);
-            System.out.println(jwtToken);
             try {
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
                 System.out.println(jwtToken);
@@ -73,13 +63,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }
         chain.doFilter(request, response);
-    }
-
-    private Claims parseToken(String token) {
-        return Jwts.parser()
-                .setSigningKey("giflex")
-                .parseClaimsJws(token.replace("Bearer", ""))
-                .getBody();
     }
 
 }

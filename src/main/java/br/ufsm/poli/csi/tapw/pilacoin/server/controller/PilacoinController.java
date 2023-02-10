@@ -72,18 +72,22 @@ public class PilacoinController {
     public boolean getIsStopped() {
         return isStopped;
     }
+    @GetMapping("/pilacoins/minerar/isMinerando")
+    public ResponseEntity<Boolean> getIsMinerando() {
+        return new ResponseEntity<>(isStopped, HttpStatus.OK);
+    }
 
-    @GetMapping("/minerar/{minerar}")
+    @GetMapping("/pilacoins/minerar/{minerar}")
     public ResponseEntity<String> scheduleRecurrently(@PathVariable boolean minerar) {
         if (minerar == true) {
             System.out.println("~ INICIANDO MINERAÇÃO JOB ~");
             isStopped = false;
             processScheduler.processOnce(minerar);
-            return ResponseEntity.ok().body("~ INICIANDO MINERAÇÃO JOB ~");
+            return new ResponseEntity<>( HttpStatus.OK);
         } else {
             System.out.println("~ PARANDO MINERAÇÃO JOB ~");
             isStopped = true;
-            return ResponseEntity.ok().body("~ PARANDO MINERAÇÃO JOB ~");
+            return new ResponseEntity<>( HttpStatus.OK);
         }
     }
 

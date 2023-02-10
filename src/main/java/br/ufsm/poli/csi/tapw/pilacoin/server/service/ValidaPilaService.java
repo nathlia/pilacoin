@@ -37,7 +37,7 @@ public class ValidaPilaService {
     public boolean validarPila(PilaCoin pilaCoinDoColega) throws JsonProcessingException, NoSuchAlgorithmException, UnsupportedEncodingException {
         BigInteger dificuldade = mineracaoController.getDificuldade();
         System.out.println(" ============================================================================================");
-        System.out.println("||                                  START: VALIDAR PILA                                     ||");
+        System.out.println("||                                  START: VALIDAR PILA                                    ||");
 
 
         if (dificuldade != null) {
@@ -48,7 +48,7 @@ public class ValidaPilaService {
 
 
             if (pilaCoinService.isNonceValid(pilaCoin, dificuldade)) {
-                System.out.println("||                                 ✔ PILACOIN VALIDO                                       ||");
+                System.out.println("||                                 ✔ PILACOIN VALIDO                                      ||");
                 System.out.println("||                           " + pilaCoin.getNonce() + "                        ||");
 
                 byte[] hashValido = pilaCoinService.getHash(pilaCoin);

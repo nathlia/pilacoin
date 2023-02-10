@@ -69,7 +69,7 @@ public class PilaCoinService {
         try {
 
             String pilaJson = objectMapper.writeValueAsString(pilaCoin);
-            System.out.println(pilaJson.replaceAll(",", ", \n"));
+//            System.out.println(pilaJson.replaceAll(",", ", \n"));
             System.out.println("--------------------------------------------------------------------------------------------");
 
             RequestEntity<String> requestEntity = RequestEntity.post(new URL(
@@ -85,8 +85,8 @@ public class PilaCoinService {
             }
 
         } catch (Exception e) {
-            System.out.println(" ❌ ERROR SENDING PILACOIN TO SERVER! ❌ ");
-            System.out.println(" " + e.getMessage());
+            System.out.println("                       ❌ ERROR SENDING PILACOIN TO SERVER! ❌ ");
+            System.out.println("                                 " + e.getMessage());
             System.out.println("--------------------------------------------------------------------------------------------");
         }
     }
@@ -105,7 +105,7 @@ public class PilaCoinService {
         try {
 
             String pilaJson = objectMapper.writeValueAsString(validPilaCoin);
-            System.out.println(pilaJson.replaceAll(",", ", \n"));
+//            System.out.println(pilaJson.replaceAll(",", ", \n"));
             System.out.println("--------------------------------------------------------------------------------------------");
 
             RequestEntity<String> requestEntity = RequestEntity.post(new URL(
@@ -120,8 +120,8 @@ public class PilaCoinService {
             }
 
         } catch (Exception e) {
-            System.out.println(" ❌ ERROR SENDING VALID PILACOIN TO SERVER! ❌ ");
-            System.out.println(" " + e.getMessage());
+            System.out.println("                     ❌ ERROR SENDING VALID PILACOIN TO SERVER! ❌ ");
+            System.out.println("                                  " + e.getMessage());
             System.out.println("--------------------------------------------------------------------------------------------");
         }
     }
