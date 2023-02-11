@@ -2,10 +2,9 @@ package br.ufsm.poli.csi.tapw.pilacoin.server.colherdecha;
 
 import br.ufsm.poli.csi.tapw.pilacoin.model.PilaCoin;
 import br.ufsm.poli.csi.tapw.pilacoin.server.model.Bloco;
-import br.ufsm.poli.csi.tapw.pilacoin.server.service.ValidaPilaService;
-import br.ufsm.poli.csi.tapw.pilacoin.server.service.ValidarBlocoService;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import br.ufsm.poli.csi.tapw.pilacoin.server.repositories.PilacoinsOutroUsuarioRepository;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -20,6 +19,7 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Type;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Objects;
 
 @Service
@@ -28,6 +28,11 @@ public class WebSocketClient {
     private MyStompSessionHandler sessionHandler = new MyStompSessionHandler();
     @Value("${endereco.server}")
     private String enderecoServer;
+
+    static ArrayList<PilaCoin> pilaCoins = new ArrayList<PilaCoin>();
+
+    @Autowired
+    PilacoinsOutroUsuarioRepository pilacoinsOutroUsuarioRepository;
 
     @PostConstruct
     private void init() {
@@ -43,6 +48,15 @@ public class WebSocketClient {
     private void printDificuldade() {
         if (sessionHandler.dificuldade != null) {
             System.out.println("Dificuldade Atual: " + sessionHandler.dificuldade);
+        }
+    }
+
+    @Scheduled(fixedRate = 70000)
+    private void cleanListPilaCoinsColega() {
+        System.out.println("INCOMING PILACOINS ARRAY WAS CLEANED!");
+        if (pilaCoins != null) {
+            pilaCoins = new ArrayList<PilaCoin>();
+            System.out.println("INCOMING PILACOINS ARRAY WAS CLEANED!");
         }
     }
 
@@ -95,6 +109,8 @@ public class WebSocketClient {
             }  else if (o.getClass().equals(PilaCoin.class)) {
                 pilaCoin = (PilaCoin) o;
                 System.out.println("  ❕ " + pilaCoin.getNonce());
+                pilaCoins.add(pilaCoin);
+                System.out.println("  👋🏻 Pilacoin added to list!" );
             } else if (o.getClass().equals(Bloco.class)) {
                 bloco = (Bloco) o;
                 System.out.println("  ❗ " + bloco);
@@ -108,11 +124,14 @@ public class WebSocketClient {
     }
 
     public PilaCoin getPilaCoin() {
-        System.out.println(" GET DIFICULDADE : " + sessionHandler.dificuldade);
         return sessionHandler.pilaCoin;
     }
+
+    public ArrayList<PilaCoin> getListPilaCoins() {
+        return pilaCoins;
+    }
+
     public Bloco getBloco() {
-        System.out.println(" GET DIFICULDADE : " + sessionHandler.dificuldade);
         return sessionHandler.bloco;
     }
 

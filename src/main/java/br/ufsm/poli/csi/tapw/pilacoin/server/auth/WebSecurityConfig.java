@@ -69,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/authenticate").permitAll()
                 .antMatchers(HttpMethod.POST,"http://srv-ceesp.proj.ufsm.br:8097").permitAll()
                 .antMatchers(HttpMethod.GET,"/pilacoins").permitAll()
-                .antMatchers(HttpMethod.GET,"/minerar/{minerar}").permitAll()
+                .antMatchers(HttpMethod.GET,"/pilacoins/pila-do-colega").permitAll()
                 .antMatchers(HttpMethod.GET,"/pilacoins/minerar/").permitAll()
                 .antMatchers(HttpMethod.GET,"/minerar").permitAll().
         // Qualquer outra requisição deve ser checada

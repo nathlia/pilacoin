@@ -4,7 +4,9 @@ package br.ufsm.poli.csi.tapw.pilacoin.server.controller;
 import br.ufsm.poli.csi.tapw.pilacoin.model.PilaCoin;
 import br.ufsm.poli.csi.tapw.pilacoin.server.colherdecha.WebSocketClient;
 import br.ufsm.poli.csi.tapw.pilacoin.server.jobr.ProcessScheduler;
+import br.ufsm.poli.csi.tapw.pilacoin.server.model.PilacoinsOutroUsuario;
 import br.ufsm.poli.csi.tapw.pilacoin.server.repositories.PilaCoinRepository;
+import br.ufsm.poli.csi.tapw.pilacoin.server.repositories.PilacoinsOutroUsuarioRepository;
 import br.ufsm.poli.csi.tapw.pilacoin.server.service.PilaCoinService;
 import br.ufsm.poli.csi.tapw.pilacoin.server.service.ValidaPilaService;
 import lombok.SneakyThrows;
@@ -32,12 +34,11 @@ public class PilacoinController {
     @Autowired
     private ValidaPilaService validaPilaService;
 
-    final
+    @Autowired
     PilaCoinRepository pilacoinRepository;
 
-    public PilacoinController(PilaCoinRepository pilacoinRepository) {
-        this.pilacoinRepository = pilacoinRepository;
-    }
+    @Autowired
+    PilacoinsOutroUsuarioRepository pilacoinsOutroUsuarioRepository;
 
     @GetMapping("/pilacoins")
     public ResponseEntity<List<PilaCoin>> getAllPilacoins(@RequestParam(required = false) String name) {
@@ -58,6 +59,27 @@ public class PilacoinController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/pilacoins/pila-do-colega")
+    public ResponseEntity<List<PilacoinsOutroUsuario>> getAllPilacoinsColega(@RequestParam(required = false) String name) {
+        try {
+            List<PilacoinsOutroUsuario> pilacoins = new ArrayList<>();
+
+            if (name == null) {
+                pilacoins.addAll(pilacoinsOutroUsuarioRepository.findAll());
+            }
+
+            if (pilacoins.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            return new ResponseEntity<>(pilacoins, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
     @GetMapping("/pilacoins/{id}")
     public ResponseEntity<PilaCoin> getPilacoinById(@PathVariable("id") Long id) {

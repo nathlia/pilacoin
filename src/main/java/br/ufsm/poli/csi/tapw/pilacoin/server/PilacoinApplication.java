@@ -1,6 +1,8 @@
 package br.ufsm.poli.csi.tapw.pilacoin.server;
 
+import br.ufsm.poli.csi.tapw.pilacoin.server.controller.MineracaoController;
 import br.ufsm.poli.csi.tapw.pilacoin.server.jobr.ProcessScheduler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -20,6 +22,9 @@ import java.util.TimeZone;
 @EntityScan("br.ufsm.poli.csi.tapw.pilacoin")
 public class PilacoinApplication {
 
+	@Autowired
+	ProcessScheduler processScheduler;
+
 	public static void main(String[] args) {
 		SpringApplication.run(PilacoinApplication.class, args);
 	}
@@ -28,6 +33,7 @@ public class PilacoinApplication {
 	public void init() {
 		// Setting Spring Boot SetTimeZone
 		TimeZone.setDefault(TimeZone.getTimeZone("America/Sao_Paulo"));
+		processScheduler.salvarPilasDoColega();
 	}
 
 }

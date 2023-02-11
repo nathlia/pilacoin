@@ -4,14 +4,11 @@ import br.ufsm.poli.csi.tapw.pilacoin.model.PilaCoin;
 import br.ufsm.poli.csi.tapw.pilacoin.server.colherdecha.WebSocketClient;
 import br.ufsm.poli.csi.tapw.pilacoin.server.model.Bloco;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 @Controller
 public class MineracaoController {
@@ -27,6 +24,11 @@ public class MineracaoController {
     @MessageMapping("/validaMineracao")
     public PilaCoin getPilaToValidate() {
         return webSocketClient.getPilaCoin();
+    }
+
+    @MessageMapping("/listaPilacoins")
+    public ArrayList<PilaCoin> getListPilacoins() {
+        return webSocketClient.getListPilaCoins();
     }
 
     @MessageMapping("/descobrirNovoBloco")
